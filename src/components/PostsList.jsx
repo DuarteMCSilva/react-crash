@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Post from './Post';
 import styles from './PostsList.module.css'
+import { useLoaderData } from 'react-router-dom';
 
 const PostsList = () => {
-    const [activePosts, setActivePosts ] = useState([]);
-    const [isFetching, setIsFetching ] = useState(false);
+    const activePosts = useLoaderData();
 
     let postsView = (
         <ul className={styles.posts}>
             {activePosts.map( (post) => {
                 return (
                     <Post 
-                        key={post.author} 
+                        key={post.author}
+                        id={post.id}
                         author={post.author} 
                         text={post.text}
                     />)
@@ -25,36 +26,10 @@ const PostsList = () => {
             <p> Start adding some! </p>
         </div>
     )
-
-    useEffect( () => {
-        async function fetchPosts() {
-            setIsFetching(true);
-            const response = await fetch('http://localhost:8080/posts')
-            const resData = await response.json();
-            setActivePosts(resData.posts);
-            setIsFetching(false);
-        }
-        fetchPosts();
-    }, [] ) 
-
-/*     function onSubmitNewPost(newPost) {
-        const URL = 'http://localhost:8080/posts'
-        const requestParams = {
-            method: 'POST',
-            body: JSON.stringify(newPost),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }
-
-        fetch(URL, requestParams)
-        setActivePosts( (existingPosts) => [newPost, ...existingPosts])
-        } */
     return (
       <>
-        { !isFetching && activePosts.length > 0 && postsView}
-        { !isFetching && activePosts.length === 0 && noPostsView }
-        { isFetching && <p> Loading posts... </p>}
+        { activePosts.length > 0 && postsView}
+        { activePosts.length === 0 && noPostsView }
       </>
     );
 }
