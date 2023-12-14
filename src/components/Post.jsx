@@ -2,11 +2,11 @@ import React from 'react';
 import styles from './Post.module.css'
 
 
-function Post(props) {
+function Post({author, text}) {
     return (
         <div className={styles.post}>
-            <p className={styles.author}> {props.author} </p>
-            <p className={styles.text}> {props.text} </p>
+            <p className={styles.author}> {author} </p>
+            <p className={styles.text}> {text} </p>
         </div>
     );
 }
